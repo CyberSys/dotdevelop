@@ -89,6 +89,21 @@ namespace MonoDevelop.DotNetCore
 		/// </summary>
 		static bool HasSupportedFramework (DotNetProject project)
 		{
+
+// in mid-2021 it was noted that debugging worked in builds with dotnet-sdk-5.0 installed, but not otherwise.
+// the reason was that with dotnet-sdk-5.0 installed this method returned always false:
+//	*) in a dotnet-sdk-5.0 build "framework" is $([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)'))
+//	*) in ordinary builds "framework" is .NETCoreApp etc as expected (and matching in the checks below).
+// => is the separate DotNetCore processing needed at all anymore, if mono can handle both .NetFramework and .NetCore items?
+// => still need to handle the separate out-file extension (.exe vs .dll) at least in debuging.
+// TODO how to handle/update the mono/dotnet runtime usage and differences?
+
+Console.WriteLine();
+Console.WriteLine( "DotNetCoreProjectExtension is DISABLED, returning always false in HasSupportedFramework()" );
+Console.WriteLine();
+return false;
+
+			/* original version removed 20210807.
 			if (project.HasMultipleTargetFrameworks)
 				return project.TargetFrameworkMonikers.Any (moniker => moniker.IsNetStandardOrNetCoreApp ());
 
@@ -96,7 +111,7 @@ namespace MonoDevelop.DotNetCore
 			if (framework != null)
 				return framework == ".NETCoreApp" || framework == ".NETStandard";
 
-			return false;
+			return false; */
 		}
 
 		protected override bool OnGetSupportsFramework (TargetFramework framework)

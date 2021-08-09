@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.IO;
 using System.Linq;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Assemblies;
@@ -175,6 +176,7 @@ namespace MonoDevelop.Projects
 		}
 		
 		public FilePath CompiledOutputName {
+			/* 20210809 original version - not working for .NetCore -projects (when using mono only).
 			get {
 				if (OutputAssembly == null)
 					return FilePath.Empty;
@@ -183,6 +185,31 @@ namespace MonoDevelop.Projects
 					return fullPath;
 				else
 					return fullPath + (CompileTarget == CompileTarget.Library ? ".dll" : ".exe");
+			} */
+			get {
+
+Console.WriteLine( "DotNetProjectConfiguration.CompiledOutputName() :: TargetFramework.Id=" + TargetFramework.Id + " AppendTargetFrameworkToOutputPath=" + AppendTargetFrameworkToOutputPath.ToString() );
+
+				if (OutputAssembly == null)
+					return FilePath.Empty;
+
+				bool extIsDll = true;
+				if ( CompileTarget == CompileTarget.Exe ) {
+					// extension for tradidional .NETFramework executables is ".exe" but ".dll" otherwise.
+					// see MonoDevelop.Core/MonoDevelop.Core.Assemblies/TargetFrameworkMoniker.cs
+					if ( TargetFramework.Id.Identifier == ".NETFramework" ) extIsDll = false;
+				}
+
+				string oa = Path.GetFileNameWithoutExtension( OutputAssembly );
+
+				if ( extIsDll ) oa += ".dll";
+				else oa += ".exe";
+
+				FilePath fullPath = OutputDirectory.Combine( oa );
+
+Console.WriteLine( "DotNetProjectConfiguration.CompiledOutputName() :: fullPath = " + fullPath );
+
+				return fullPath;
 			}
 		}
 		
