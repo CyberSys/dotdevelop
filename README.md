@@ -1,3 +1,7 @@
+For my own developments see these braches:
+------------------------------------------
+ * `th2021_debugger_fixes`: Disable DotNetCoreProjectExtension usage, set extension dll for .NetCore targets while keeping extension exe for .NetFramework targets.
+
 **PLEASE NOTE!**
 
 This is an effort to get monodevelop open sourced again.
