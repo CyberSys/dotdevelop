@@ -1,6 +1,8 @@
 For my own developments see these braches:
 ------------------------------------------
- * `th2021_debugger_fixes`: Disable DotNetCoreProjectExtension usage, set extension dll for .NetCore targets while keeping extension exe for .NetFramework targets.
+* `th2021_debugger_fixes`:
+  * Problem: when building and running DotDevelop without any of the dotnet-sdks installed, debugging apps did not work. However debugging worked after installing dotnet-sdk-5.0 and adding symlinks so that the assemblies were found. It turned out that DotNetCoreProjectExtension was not activated, and MonoSoftDebugger was activated instead, due to some new values returned by dotnet-sdk-5.
+  * Solution: since the recent mono-versions can handle .NetCore -projects as well, DotNetCoreProjectExtension usage is disabled. To allow debugger find the asseblies, file extension ".dll" is set for executables except for .NetFramework targets for which ".exe" is used as before. Now building and debugging works up to netcoreapp3.1 -targets (all targets supported by mono runtime at the moment).
 
 **PLEASE NOTE!**
 
